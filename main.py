@@ -1,4 +1,4 @@
-# abstraction/__init__.py
+# abstraction/main.py
 from game import create_objects, load_game_data
 from player import Player
 from config import game_data
