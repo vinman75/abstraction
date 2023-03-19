@@ -1,0 +1,71 @@
+# abstraction/game_data.yaml
+game_data:
+  starting_location: Clearing
+
+  locations:
+    - name: Clearing
+      descriptions:
+        - You are standing in a small clearing surrounded by trees.
+      items: [Sign, Rope, Stick]
+      neighbors:
+        n: Dark Forest
+      effect_states: [0]
+
+    - name: Dark Forest
+      descriptions:
+        - You are in a dark and spooky forest. The trees block out most of the light.
+        - You are in a dark and spooky forest. The trees block out most of the light. You hear a duck quacking in the distance.
+      items: [Key, LockedDoor, Button]
+      neighbors:
+        s: Clearing
+      effect_states: [0, 1]
+
+  items:
+    - name: Key
+      description: A small, rusty key. It looks like it might fit the lock on the door.
+      actions: {take: {success_message: You pick up the key.}, use: {success_message: You use the key to unlock the door., fail_message: The key does not fit the lock., item_use: LockedDoor}}
+      fixed: false
+      item_type: Key
+
+    - name: Rope
+      description: A sturdy rope, useful for tying things together.
+      actions: {inspect: {success_message: "You inspect the rope. It's sturdy and well-made."}, read: {success_message: "There's nothing to read on the rope."}, take: {success_message: You pick up the rope.}, combine: {success_message: You combine the rope and the stick to make a grabber rod., target_name: Stick, combined_item_name: GrabberRod}}
+      fixed: false
+      item_type: Rope
+
+    - name: Stick
+      description: A long stick, could be useful if combined with something.
+      actions: {inspect: {success_message: "You inspect the stick. It's long and straight."}, read: {success_message: "There's nothing to read on the stick."}, take: {success_message: You pick up the stick.}, combine: {success_message: You combine the rope and the stick to make a grabber rod., target_name: Rope, combined_item_name: GrabberRod}}
+      fixed: false
+      item_type: Stick
+
+    - name: GrabberRod
+      description: A makeshift grabber rod made by tying a rope to a stick. It can be used to reach items that are out of reach.
+      actions: {inspect: {success_message: "You inspect the grabber rod. It's a stick tied with a rope, creating a makeshift tool."}, read: {success_message: "There's nothing to read on the grabber rod."}}
+      fixed: false
+      item_type: GrabberRod
+
+    - name: Sign
+      description: "The sign reads: 'Beware the dark forest!'"
+      actions: {inspect: {success_message: "The sign reads: 'Beware the dark forest!'"}, read: {success_message: "The sign reads: 'Beware the dark forest!'"}} 
+      fixed: true
+      item_type: Sign
+
+    - name: Button
+      description: A small, round button on a tree trunk. It looks like it can be pressed.
+      actions:
+        use:
+          success_message: You press the button. You hear a duck quacking in the distance.
+          effects:
+            - effect_type: update_effect_state
+              target_location: Dark Forest
+              effect_state: 1
+      fixed: true
+      item_type: Button
+
+
+    - name: LockedDoor
+      description: A heavy wooden door with a large lock. It seems to lead deeper into the forest.
+      actions: {use: {success_message: The door unlocks and opens, revealing a path., fail_message: The key does not fit the lock., item_use: Key}}
+      fixed: true
+      item_type: LockedDoor
